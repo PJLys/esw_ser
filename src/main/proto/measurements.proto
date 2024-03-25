@@ -3,3 +3,20 @@ package esw;
 
 option java_package = "cz.esw.serialization.proto";
 option java_multiple_files = true;
+
+message pAverages {
+  double DOWNLOAD = 1;
+  double PING = 2;
+  double UPLOAD = 3;
+}
+
+message pInfo {
+  int64 id = 1;
+  string measurerName = 2;
+  int64 timestamp = 3;
+}
+
+message pData {
+  pAverages averages = 1;
+  pInfo info = 2;
+}

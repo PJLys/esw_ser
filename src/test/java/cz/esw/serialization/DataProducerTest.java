@@ -33,6 +33,5 @@ class DataProducerTest {
 				dataset.getRecords().forEach((type, values) -> consumer.acceptResult(type,values.stream().mapToDouble(Double::doubleValue).average().orElseThrow() ));
 			}
 		}
-
 	}
 }
