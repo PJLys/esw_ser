@@ -63,9 +63,11 @@ public class JsonDataHandler implements DataHandler {
 	@Override
 	public void handleValue(int datasetId, DataType type, double value) {
 		Dataset dataset = datasets.get(datasetId);
+
 		if (dataset == null) {
 			throw new IllegalArgumentException("Dataset with id " + datasetId + " not initialized.");
 		}
+
 		dataset.getRecords().computeIfAbsent(type, t -> new ArrayList<>()).add(value);
 	}
 

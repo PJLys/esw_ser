@@ -4,19 +4,34 @@ package esw;
 option java_package = "cz.esw.serialization.proto";
 option java_multiple_files = true;
 
-message pAverages {
-  double DOWNLOAD = 1;
-  double PING = 2;
-  double UPLOAD = 3;
+message pMeasurementInfo {
+  int32 id = 1;
+  int64 timestamp = 2;
+  string measurer_name = 3;
 }
 
-message pInfo {
-  int64 id = 1;
-  string measurerName = 2;
-  int64 timestamp = 3;
+enum pDataType {
+  DOWNLOAD = 0;
+  UPLOAD = 1;
+  PING = 2;
 }
 
-message pData {
-  pAverages averages = 1;
-  pInfo info = 2;
+message pDataset {
+  pMeasurementInfo info = 1;
+  repeated pRecord records = 2;
+
+  message pRecord {
+    pDataType data_type = 1;
+    repeated double values = 2;
+  }
+}
+
+message pResult {
+  pMeasurementInfo info = 1;
+  repeated Average averages = 2;
+
+  message Average {
+    pDataType data_type = 1;
+    double value = 2;
+  }
 }
