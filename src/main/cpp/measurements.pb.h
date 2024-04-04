@@ -67,9 +67,9 @@ extern pMeasurementInfoDefaultTypeInternal _pMeasurementInfo_default_instance_;
 class pResult;
 struct pResultDefaultTypeInternal;
 extern pResultDefaultTypeInternal _pResult_default_instance_;
-class pResult_Average;
-struct pResult_AverageDefaultTypeInternal;
-extern pResult_AverageDefaultTypeInternal _pResult_Average_default_instance_;
+class pResult_pAverage;
+struct pResult_pAverageDefaultTypeInternal;
+extern pResult_pAverageDefaultTypeInternal _pResult_pAverage_default_instance_;
 }  // namespace esw
 namespace google {
 namespace protobuf {
@@ -668,25 +668,25 @@ class pDataset final :
   friend struct ::TableStruct_measurements_2eproto;
 };// -------------------------------------------------------------------
 
-class pResult_Average final :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:esw.pResult.Average) */ {
+class pResult_pAverage final :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:esw.pResult.pAverage) */ {
  public:
-  inline pResult_Average() : pResult_Average(nullptr) {}
-  ~pResult_Average() override;
+  inline pResult_pAverage() : pResult_pAverage(nullptr) {}
+  ~pResult_pAverage() override;
   template<typename = void>
-  explicit PROTOBUF_CONSTEXPR pResult_Average(::google::protobuf::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR pResult_pAverage(::google::protobuf::internal::ConstantInitialized);
 
-  pResult_Average(const pResult_Average& from);
-  pResult_Average(pResult_Average&& from) noexcept
-    : pResult_Average() {
+  pResult_pAverage(const pResult_pAverage& from);
+  pResult_pAverage(pResult_pAverage&& from) noexcept
+    : pResult_pAverage() {
     *this = ::std::move(from);
   }
 
-  inline pResult_Average& operator=(const pResult_Average& from) {
+  inline pResult_pAverage& operator=(const pResult_pAverage& from) {
     CopyFrom(from);
     return *this;
   }
-  inline pResult_Average& operator=(pResult_Average&& from) noexcept {
+  inline pResult_pAverage& operator=(pResult_pAverage&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -716,20 +716,20 @@ class pResult_Average final :
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const pResult_Average& default_instance() {
+  static const pResult_pAverage& default_instance() {
     return *internal_default_instance();
   }
-  static inline const pResult_Average* internal_default_instance() {
-    return reinterpret_cast<const pResult_Average*>(
-               &_pResult_Average_default_instance_);
+  static inline const pResult_pAverage* internal_default_instance() {
+    return reinterpret_cast<const pResult_pAverage*>(
+               &_pResult_pAverage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  friend void swap(pResult_Average& a, pResult_Average& b) {
+  friend void swap(pResult_pAverage& a, pResult_pAverage& b) {
     a.Swap(&b);
   }
-  inline void Swap(pResult_Average* other) {
+  inline void Swap(pResult_pAverage* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -742,7 +742,7 @@ class pResult_Average final :
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(pResult_Average* other) {
+  void UnsafeArenaSwap(pResult_pAverage* other) {
     if (other == this) return;
     ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -750,14 +750,14 @@ class pResult_Average final :
 
   // implements Message ----------------------------------------------
 
-  pResult_Average* New(::google::protobuf::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<pResult_Average>(arena);
+  pResult_pAverage* New(::google::protobuf::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<pResult_pAverage>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const pResult_Average& from);
+  void CopyFrom(const pResult_pAverage& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom( const pResult_Average& from) {
-    pResult_Average::MergeImpl(*this, from);
+  void MergeFrom( const pResult_pAverage& from) {
+    pResult_pAverage::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg);
@@ -775,15 +775,15 @@ class pResult_Average final :
   void SharedCtor(::google::protobuf::Arena* arena);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(pResult_Average* other);
+  void InternalSwap(pResult_pAverage* other);
 
   private:
   friend class ::google::protobuf::internal::AnyMetadata;
   static ::absl::string_view FullMessageName() {
-    return "esw.pResult.Average";
+    return "esw.pResult.pAverage";
   }
   protected:
-  explicit pResult_Average(::google::protobuf::Arena* arena);
+  explicit pResult_pAverage(::google::protobuf::Arena* arena);
   public:
 
   static const ClassData _class_data_;
@@ -819,7 +819,7 @@ class pResult_Average final :
   void _internal_set_data_type(::esw::pDataType value);
 
   public:
-  // @@protoc_insertion_point(class_scope:esw.pResult.Average)
+  // @@protoc_insertion_point(class_scope:esw.pResult.pAverage)
  private:
   class _Internal;
 
@@ -963,7 +963,7 @@ class pResult final :
 
   // nested types ----------------------------------------------------
 
-  typedef pResult_Average Average;
+  typedef pResult_pAverage pAverage;
 
   // accessors -------------------------------------------------------
 
@@ -971,23 +971,23 @@ class pResult final :
     kAveragesFieldNumber = 2,
     kInfoFieldNumber = 1,
   };
-  // repeated .esw.pResult.Average averages = 2;
+  // repeated .esw.pResult.pAverage averages = 2;
   int averages_size() const;
   private:
   int _internal_averages_size() const;
 
   public:
   void clear_averages() ;
-  ::esw::pResult_Average* mutable_averages(int index);
-  ::google::protobuf::RepeatedPtrField< ::esw::pResult_Average >*
+  ::esw::pResult_pAverage* mutable_averages(int index);
+  ::google::protobuf::RepeatedPtrField< ::esw::pResult_pAverage >*
       mutable_averages();
   private:
-  const ::google::protobuf::RepeatedPtrField<::esw::pResult_Average>& _internal_averages() const;
-  ::google::protobuf::RepeatedPtrField<::esw::pResult_Average>* _internal_mutable_averages();
+  const ::google::protobuf::RepeatedPtrField<::esw::pResult_pAverage>& _internal_averages() const;
+  ::google::protobuf::RepeatedPtrField<::esw::pResult_pAverage>* _internal_mutable_averages();
   public:
-  const ::esw::pResult_Average& averages(int index) const;
-  ::esw::pResult_Average* add_averages();
-  const ::google::protobuf::RepeatedPtrField< ::esw::pResult_Average >&
+  const ::esw::pResult_pAverage& averages(int index) const;
+  ::esw::pResult_pAverage* add_averages();
+  const ::google::protobuf::RepeatedPtrField< ::esw::pResult_pAverage >&
       averages() const;
   // .esw.pMeasurementInfo info = 1;
   bool has_info() const;
@@ -1016,7 +1016,7 @@ class pResult final :
   struct Impl_ {
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedPtrField< ::esw::pResult_Average > averages_;
+    ::google::protobuf::RepeatedPtrField< ::esw::pResult_pAverage > averages_;
     ::esw::pMeasurementInfo* info_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -1351,47 +1351,47 @@ pDataset::_internal_mutable_records() {
 
 // -------------------------------------------------------------------
 
-// pResult_Average
+// pResult_pAverage
 
 // .esw.pDataType data_type = 1;
-inline void pResult_Average::clear_data_type() {
+inline void pResult_pAverage::clear_data_type() {
   _impl_.data_type_ = 0;
 }
-inline ::esw::pDataType pResult_Average::data_type() const {
-  // @@protoc_insertion_point(field_get:esw.pResult.Average.data_type)
+inline ::esw::pDataType pResult_pAverage::data_type() const {
+  // @@protoc_insertion_point(field_get:esw.pResult.pAverage.data_type)
   return _internal_data_type();
 }
-inline void pResult_Average::set_data_type(::esw::pDataType value) {
+inline void pResult_pAverage::set_data_type(::esw::pDataType value) {
   _internal_set_data_type(value);
-  // @@protoc_insertion_point(field_set:esw.pResult.Average.data_type)
+  // @@protoc_insertion_point(field_set:esw.pResult.pAverage.data_type)
 }
-inline ::esw::pDataType pResult_Average::_internal_data_type() const {
+inline ::esw::pDataType pResult_pAverage::_internal_data_type() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return static_cast<::esw::pDataType>(_impl_.data_type_);
 }
-inline void pResult_Average::_internal_set_data_type(::esw::pDataType value) {
+inline void pResult_pAverage::_internal_set_data_type(::esw::pDataType value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.data_type_ = value;
 }
 
 // double value = 2;
-inline void pResult_Average::clear_value() {
+inline void pResult_pAverage::clear_value() {
   _impl_.value_ = 0;
 }
-inline double pResult_Average::value() const {
-  // @@protoc_insertion_point(field_get:esw.pResult.Average.value)
+inline double pResult_pAverage::value() const {
+  // @@protoc_insertion_point(field_get:esw.pResult.pAverage.value)
   return _internal_value();
 }
-inline void pResult_Average::set_value(double value) {
+inline void pResult_pAverage::set_value(double value) {
   _internal_set_value(value);
-  // @@protoc_insertion_point(field_set:esw.pResult.Average.value)
+  // @@protoc_insertion_point(field_set:esw.pResult.pAverage.value)
 }
-inline double pResult_Average::_internal_value() const {
+inline double pResult_pAverage::_internal_value() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return _impl_.value_;
 }
-inline void pResult_Average::_internal_set_value(double value) {
+inline void pResult_pAverage::_internal_set_value(double value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.value_ = value;
@@ -1497,7 +1497,7 @@ inline void pResult::set_allocated_info(::esw::pMeasurementInfo* value) {
   // @@protoc_insertion_point(field_set_allocated:esw.pResult.info)
 }
 
-// repeated .esw.pResult.Average averages = 2;
+// repeated .esw.pResult.pAverage averages = 2;
 inline int pResult::_internal_averages_size() const {
   return _internal_averages().size();
 }
@@ -1507,37 +1507,37 @@ inline int pResult::averages_size() const {
 inline void pResult::clear_averages() {
   _internal_mutable_averages()->Clear();
 }
-inline ::esw::pResult_Average* pResult::mutable_averages(int index) {
+inline ::esw::pResult_pAverage* pResult::mutable_averages(int index) {
   // @@protoc_insertion_point(field_mutable:esw.pResult.averages)
   return _internal_mutable_averages()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField< ::esw::pResult_Average >*
+inline ::google::protobuf::RepeatedPtrField< ::esw::pResult_pAverage >*
 pResult::mutable_averages() {
   // @@protoc_insertion_point(field_mutable_list:esw.pResult.averages)
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   return _internal_mutable_averages();
 }
-inline const ::esw::pResult_Average& pResult::averages(int index) const {
+inline const ::esw::pResult_pAverage& pResult::averages(int index) const {
   // @@protoc_insertion_point(field_get:esw.pResult.averages)
     return _internal_averages().Get(index);
 }
-inline ::esw::pResult_Average* pResult::add_averages() {
+inline ::esw::pResult_pAverage* pResult::add_averages() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  ::esw::pResult_Average* _add = _internal_mutable_averages()->Add();
+  ::esw::pResult_pAverage* _add = _internal_mutable_averages()->Add();
   // @@protoc_insertion_point(field_add:esw.pResult.averages)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::esw::pResult_Average >&
+inline const ::google::protobuf::RepeatedPtrField< ::esw::pResult_pAverage >&
 pResult::averages() const {
   // @@protoc_insertion_point(field_list:esw.pResult.averages)
   return _internal_averages();
 }
-inline const ::google::protobuf::RepeatedPtrField<::esw::pResult_Average>&
+inline const ::google::protobuf::RepeatedPtrField<::esw::pResult_pAverage>&
 pResult::_internal_averages() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return _impl_.averages_;
 }
-inline ::google::protobuf::RepeatedPtrField<::esw::pResult_Average>*
+inline ::google::protobuf::RepeatedPtrField<::esw::pResult_pAverage>*
 pResult::_internal_mutable_averages() {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return &_impl_.averages_;
