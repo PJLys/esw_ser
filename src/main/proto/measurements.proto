@@ -28,9 +28,9 @@ message pDataset {
 
 message pResult {
   pMeasurementInfo info = 1;
-  repeated Average averages = 2;
+  repeated pAverage averages = 2;
 
-  message Average {
+  message pAverage {
     pDataType data_type = 1;
     double value = 2;
   }

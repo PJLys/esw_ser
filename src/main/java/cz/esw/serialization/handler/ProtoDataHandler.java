@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.List;
 
 import cz.esw.serialization.proto.*;
+import org.apache.commons.lang3.NotImplementedException;
+
 /**
  * @author Marek Cuchý (CVUT)
  */
@@ -86,6 +88,6 @@ public class ProtoDataHandler implements DataHandler {
 
 	@Override
 	public void getResults(ResultConsumer consumer) {
-
+		throw new NotImplementedException();
 	}
 }
