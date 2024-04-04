@@ -3,13 +3,11 @@ package cz.esw.serialization.handler;
 import cz.esw.serialization.ResultConsumer;
 import cz.esw.serialization.json.DataType;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 import cz.esw.serialization.proto.*;
+import org.apache.avro.JsonProperties;
 import org.apache.commons.lang3.NotImplementedException;
 
 /**
@@ -88,25 +86,21 @@ public class ProtoDataHandler implements DataHandler {
 	public void getResults(ResultConsumer consumer) throws IOException {
 		// Write datasets to os
 		for (pDataset ds : datasets.values()) {
-			os.write(ds.getSerializedSize());
-			os.write(ds.toByteArray());
+			os.write(ds.getSerializedSize()); // For C-based frameworks
+			ds.writeTo(os);
 			os.flush();
 		}
 
-		// Receive results on is
+		// Receive results on is and store in array
 		List<pResult> results = new ArrayList<>();
-		DataInputStream dis = new DataInputStream(is);
-		while (is.available() > 0){
-			int resSize = dis.readInt();
-			byte[] resData = new byte[resSize];
-			dis.readFully(resData);
-			pResult res = pResult.parseFrom(resData);
+		while (true) {
+			pResult res = pResult.parseDelimitedFrom(is);
+			if (res== null) break;
 			results.add(res);
 		}
 
 		for (pResult res : results)
 			System.out.println(res.toString());
 
-		dis.close();
 	}
 }
