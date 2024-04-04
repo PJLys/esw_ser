@@ -8,6 +8,8 @@
 #include <boost/asio.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include "measurements.pb.h"
+
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -55,7 +57,13 @@ void processAvro(tcp::iostream& stream){
 }
 
 void processProtobuf(tcp::iostream& stream){
-    throw std::logic_error("TODO: Implement protobuf");
+    esw::pDataset incoming_message;
+
+    /* Read the message from the stream */
+    if (!incoming_message.ParseFromIstream(&stream)) {
+        throw std::logic_error("Failed to parse incoming message");
+    }
+
 }
 
 int main(int argc, char *argv[]) {

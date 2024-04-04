@@ -78,22 +78,22 @@ struct pDatasetDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 pDatasetDefaultTypeInternal _pDataset_default_instance_;
         template <typename>
-PROTOBUF_CONSTEXPR pResult_Average::pResult_Average(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR pResult_pAverage::pResult_pAverage(::_pbi::ConstantInitialized)
     : _impl_{
       /*decltype(_impl_.value_)*/ 0,
       /*decltype(_impl_.data_type_)*/ 0,
       /*decltype(_impl_._cached_size_)*/ {},
     } {}
-struct pResult_AverageDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR pResult_AverageDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~pResult_AverageDefaultTypeInternal() {}
+struct pResult_pAverageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR pResult_pAverageDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~pResult_pAverageDefaultTypeInternal() {}
   union {
-    pResult_Average _instance;
+    pResult_pAverage _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 pResult_AverageDefaultTypeInternal _pResult_Average_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 pResult_pAverageDefaultTypeInternal _pResult_pAverage_default_instance_;
         template <typename>
 PROTOBUF_CONSTEXPR pResult::pResult(::_pbi::ConstantInitialized)
     : _impl_{
@@ -153,15 +153,15 @@ const ::uint32_t TableStruct_measurements_2eproto::offsets[] PROTOBUF_SECTION_VA
     0,
     ~0u,
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::esw::pResult_Average, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::esw::pResult_pAverage, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::esw::pResult_Average, _impl_.data_type_),
-    PROTOBUF_FIELD_OFFSET(::esw::pResult_Average, _impl_.value_),
+    PROTOBUF_FIELD_OFFSET(::esw::pResult_pAverage, _impl_.data_type_),
+    PROTOBUF_FIELD_OFFSET(::esw::pResult_pAverage, _impl_.value_),
     PROTOBUF_FIELD_OFFSET(::esw::pResult, _impl_._has_bits_),
     PROTOBUF_FIELD_OFFSET(::esw::pResult, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -181,7 +181,7 @@ static const ::_pbi::MigrationSchema
         {0, -1, -1, sizeof(::esw::pMeasurementInfo)},
         {11, -1, -1, sizeof(::esw::pDataset_pRecord)},
         {21, 31, -1, sizeof(::esw::pDataset)},
-        {33, -1, -1, sizeof(::esw::pResult_Average)},
+        {33, -1, -1, sizeof(::esw::pResult_pAverage)},
         {43, 53, -1, sizeof(::esw::pResult)},
 };
 
@@ -189,7 +189,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::esw::_pMeasurementInfo_default_instance_._instance,
     &::esw::_pDataset_pRecord_default_instance_._instance,
     &::esw::_pDataset_default_instance_._instance,
-    &::esw::_pResult_Average_default_instance_._instance,
+    &::esw::_pResult_pAverage_default_instance_._instance,
     &::esw::_pResult_default_instance_._instance,
 };
 const char descriptor_table_protodef_measurements_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -199,19 +199,19 @@ const char descriptor_table_protodef_measurements_2eproto[] PROTOBUF_SECTION_VAR
     "\030\001 \001(\0132\025.esw.pMeasurementInfo\022&\n\007records"
     "\030\002 \003(\0132\025.esw.pDataset.pRecord\032<\n\007pRecord"
     "\022!\n\tdata_type\030\001 \001(\0162\016.esw.pDataType\022\016\n\006v"
-    "alues\030\002 \003(\001\"\223\001\n\007pResult\022#\n\004info\030\001 \001(\0132\025."
-    "esw.pMeasurementInfo\022&\n\010averages\030\002 \003(\0132\024"
-    ".esw.pResult.Average\032;\n\007Average\022!\n\tdata_"
-    "type\030\001 \001(\0162\016.esw.pDataType\022\r\n\005value\030\002 \001("
-    "\001*/\n\tpDataType\022\014\n\010DOWNLOAD\020\000\022\n\n\006UPLOAD\020\001"
-    "\022\010\n\004PING\020\002B\036\n\032cz.esw.serialization.proto"
-    "P\001b\006proto3"
+    "alues\030\002 \003(\001\"\225\001\n\007pResult\022#\n\004info\030\001 \001(\0132\025."
+    "esw.pMeasurementInfo\022\'\n\010averages\030\002 \003(\0132\025"
+    ".esw.pResult.pAverage\032<\n\010pAverage\022!\n\tdat"
+    "a_type\030\001 \001(\0162\016.esw.pDataType\022\r\n\005value\030\002 "
+    "\001(\001*/\n\tpDataType\022\014\n\010DOWNLOAD\020\000\022\n\n\006UPLOAD"
+    "\020\001\022\010\n\004PING\020\002B\036\n\032cz.esw.serialization.pro"
+    "toP\001b\006proto3"
 };
 static ::absl::once_flag descriptor_table_measurements_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_measurements_2eproto = {
     false,
     false,
-    490,
+    492,
     descriptor_table_protodef_measurements_2eproto,
     "measurements.proto",
     &descriptor_table_measurements_2eproto_once,
@@ -939,22 +939,22 @@ void pDataset::InternalSwap(pDataset* other) {
 }
 // ===================================================================
 
-class pResult_Average::_Internal {
+class pResult_pAverage::_Internal {
  public:
 };
 
-pResult_Average::pResult_Average(::google::protobuf::Arena* arena)
+pResult_pAverage::pResult_pAverage(::google::protobuf::Arena* arena)
     : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:esw.pResult.Average)
+  // @@protoc_insertion_point(arena_constructor:esw.pResult.pAverage)
 }
-pResult_Average::pResult_Average(const pResult_Average& from)
+pResult_pAverage::pResult_pAverage(const pResult_pAverage& from)
     : ::google::protobuf::Message(), _impl_(from._impl_) {
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:esw.pResult.Average)
+  // @@protoc_insertion_point(copy_constructor:esw.pResult.pAverage)
 }
-inline void pResult_Average::SharedCtor(::_pb::Arena* arena) {
+inline void pResult_pAverage::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
       decltype(_impl_.value_){0},
@@ -962,20 +962,20 @@ inline void pResult_Average::SharedCtor(::_pb::Arena* arena) {
       /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-pResult_Average::~pResult_Average() {
-  // @@protoc_insertion_point(destructor:esw.pResult.Average)
+pResult_pAverage::~pResult_pAverage() {
+  // @@protoc_insertion_point(destructor:esw.pResult.pAverage)
   _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-inline void pResult_Average::SharedDtor() {
+inline void pResult_pAverage::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
 }
-void pResult_Average::SetCachedSize(int size) const {
+void pResult_pAverage::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-PROTOBUF_NOINLINE void pResult_Average::Clear() {
-// @@protoc_insertion_point(message_clear_start:esw.pResult.Average)
+PROTOBUF_NOINLINE void pResult_pAverage::Clear() {
+// @@protoc_insertion_point(message_clear_start:esw.pResult.pAverage)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -986,7 +986,7 @@ PROTOBUF_NOINLINE void pResult_Average::Clear() {
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* pResult_Average::_InternalParse(
+const char* pResult_pAverage::_InternalParse(
     const char* ptr, ::_pbi::ParseContext* ctx) {
   ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
@@ -994,7 +994,7 @@ const char* pResult_Average::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_Average::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_pAverage::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
@@ -1005,23 +1005,23 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_Average::_table_ = {
     2,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
-    &_pResult_Average_default_instance_._instance,
+    &_pResult_pAverage_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
     // double value = 2;
     {::_pbi::TcParser::FastF64S1,
-     {17, 63, 0, PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.value_)}},
+     {17, 63, 0, PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.value_)}},
     // .esw.pDataType data_type = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(pResult_Average, _impl_.data_type_), 63>(),
-     {8, 63, 0, PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.data_type_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(pResult_pAverage, _impl_.data_type_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.data_type_)}},
   }}, {{
     65535, 65535
   }}, {{
     // .esw.pDataType data_type = 1;
-    {PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.data_type_), 0, 0,
+    {PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.data_type_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
     // double value = 2;
-    {PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.value_), 0, 0,
+    {PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.value_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kDouble)},
   }},
   // no aux_entries
@@ -1029,10 +1029,10 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_Average::_table_ = {
   }},
 };
 
-::uint8_t* pResult_Average::_InternalSerialize(
+::uint8_t* pResult_pAverage::_InternalSerialize(
     ::uint8_t* target,
     ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:esw.pResult.Average)
+  // @@protoc_insertion_point(serialize_to_array_start:esw.pResult.pAverage)
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
@@ -1060,12 +1060,12 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_Average::_table_ = {
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
             _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:esw.pResult.Average)
+  // @@protoc_insertion_point(serialize_to_array_end:esw.pResult.pAverage)
   return target;
 }
 
-::size_t pResult_Average::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:esw.pResult.Average)
+::size_t pResult_pAverage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:esw.pResult.pAverage)
   ::size_t total_size = 0;
 
   ::uint32_t cached_has_bits = 0;
@@ -1091,17 +1091,17 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> pResult_Average::_table_ = {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::google::protobuf::Message::ClassData pResult_Average::_class_data_ = {
+const ::google::protobuf::Message::ClassData pResult_pAverage::_class_data_ = {
     ::google::protobuf::Message::CopyWithSourceCheck,
-    pResult_Average::MergeImpl
+    pResult_pAverage::MergeImpl
 };
-const ::google::protobuf::Message::ClassData*pResult_Average::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*pResult_pAverage::GetClassData() const { return &_class_data_; }
 
 
-void pResult_Average::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
-  auto* const _this = static_cast<pResult_Average*>(&to_msg);
-  auto& from = static_cast<const pResult_Average&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:esw.pResult.Average)
+void pResult_pAverage::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
+  auto* const _this = static_cast<pResult_pAverage*>(&to_msg);
+  auto& from = static_cast<const pResult_pAverage&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:esw.pResult.pAverage)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1120,29 +1120,29 @@ void pResult_Average::MergeImpl(::google::protobuf::Message& to_msg, const ::goo
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void pResult_Average::CopyFrom(const pResult_Average& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:esw.pResult.Average)
+void pResult_pAverage::CopyFrom(const pResult_pAverage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:esw.pResult.pAverage)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-PROTOBUF_NOINLINE bool pResult_Average::IsInitialized() const {
+PROTOBUF_NOINLINE bool pResult_pAverage::IsInitialized() const {
   return true;
 }
 
-void pResult_Average::InternalSwap(pResult_Average* other) {
+void pResult_pAverage::InternalSwap(pResult_pAverage* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.data_type_)
-      + sizeof(pResult_Average::_impl_.data_type_)
-      - PROTOBUF_FIELD_OFFSET(pResult_Average, _impl_.value_)>(
+      PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.data_type_)
+      + sizeof(pResult_pAverage::_impl_.data_type_)
+      - PROTOBUF_FIELD_OFFSET(pResult_pAverage, _impl_.value_)>(
           reinterpret_cast<char*>(&_impl_.value_),
           reinterpret_cast<char*>(&other->_impl_.value_));
 }
 
-::google::protobuf::Metadata pResult_Average::GetMetadata() const {
+::google::protobuf::Metadata pResult_pAverage::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_measurements_2eproto_getter, &descriptor_table_measurements_2eproto_once,
       file_level_metadata_measurements_2eproto[3]);
@@ -1246,7 +1246,7 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> pResult::_table_ = {
     &_pResult_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // repeated .esw.pResult.Average averages = 2;
+    // repeated .esw.pResult.pAverage averages = 2;
     {::_pbi::TcParser::FastMtR1,
      {18, 63, 1, PROTOBUF_FIELD_OFFSET(pResult, _impl_.averages_)}},
     // .esw.pMeasurementInfo info = 1;
@@ -1258,12 +1258,12 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> pResult::_table_ = {
     // .esw.pMeasurementInfo info = 1;
     {PROTOBUF_FIELD_OFFSET(pResult, _impl_.info_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // repeated .esw.pResult.Average averages = 2;
+    // repeated .esw.pResult.pAverage averages = 2;
     {PROTOBUF_FIELD_OFFSET(pResult, _impl_.averages_), -1, 1,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::esw::pMeasurementInfo>()},
-    {::_pbi::TcParser::GetTable<::esw::pResult_Average>()},
+    {::_pbi::TcParser::GetTable<::esw::pResult_pAverage>()},
   }}, {{
   }},
 };
@@ -1283,7 +1283,7 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> pResult::_table_ = {
         _Internal::info(this).GetCachedSize(), target, stream);
   }
 
-  // repeated .esw.pResult.Average averages = 2;
+  // repeated .esw.pResult.pAverage averages = 2;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_averages_size()); i < n; i++) {
     const auto& repfield = this->_internal_averages().Get(i);
@@ -1308,7 +1308,7 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> pResult::_table_ = {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .esw.pResult.Average averages = 2;
+  // repeated .esw.pResult.pAverage averages = 2;
   total_size += 1UL * this->_internal_averages_size();
   for (const auto& msg : this->_internal_averages()) {
     total_size +=
