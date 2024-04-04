@@ -3,12 +3,11 @@ package cz.esw.serialization.handler;
 import cz.esw.serialization.ResultConsumer;
 import cz.esw.serialization.json.DataType;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 import cz.esw.serialization.proto.*;
 import org.apache.commons.lang3.NotImplementedException;
@@ -20,7 +19,6 @@ public class ProtoDataHandler implements DataHandler {
 	private final InputStream is;
 	private final OutputStream os;
 	protected Map<Integer, pDataset> datasets;
-
 
 	public ProtoDataHandler(InputStream is, OutputStream os) {
 		this.is = is; this.os = os;
@@ -87,7 +85,28 @@ public class ProtoDataHandler implements DataHandler {
 	}
 
 	@Override
-	public void getResults(ResultConsumer consumer) {
-		throw new NotImplementedException();
+	public void getResults(ResultConsumer consumer) throws IOException {
+		// Write datasets to os
+		for (pDataset ds : datasets.values()) {
+			os.write(ds.getSerializedSize());
+			os.write(ds.toByteArray());
+			os.flush();
+		}
+
+		// Receive results on is
+		List<pResult> results = new ArrayList<>();
+		DataInputStream dis = new DataInputStream(is);
+		while (is.available() > 0){
+			int resSize = dis.readInt();
+			byte[] resData = new byte[resSize];
+			dis.readFully(resData);
+			pResult res = pResult.parseFrom(resData);
+			results.add(res);
+		}
+
+		for (pResult res : results)
+			System.out.println(res.toString());
+
+		dis.close();
 	}
 }
