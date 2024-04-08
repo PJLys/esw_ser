@@ -4,6 +4,7 @@ import cz.esw.serialization.ResultConsumer;
 import cz.esw.serialization.json.DataType;
 
 import java.io.*;
+import java.rmi.UnexpectedException;
 import java.util.*;
 
 import cz.esw.serialization.proto.*;
@@ -36,59 +37,62 @@ public class ProtoDataHandler implements DataHandler {
 				.setMeasurerName(measurerName)
 				.build();
 
+		List<pDataset.pRecord> recordList = new ArrayList<>();
+
+		for (int i=0; i<3; i++){
+			recordList.add(pDataset.pRecord.newBuilder()
+					.setDataTypeValue(i)
+					.build()
+			);
+		}
+
 		pDataset pdataset = pDataset.newBuilder()
 				.setInfo(pinfo)
+				.addAllRecords(recordList)
 				.build();
 
 		this.datasets.put(datasetId, pdataset);
 	}
 
+	/**
+	 * Adds a value to the specified dataset for a specific record type
+	 * @param datasetId id of the dataset to which the value belongs
+	 * @param type      type of the record: 0=DL, 1=UL, 2=PING
+	 * @param value     float to be added in the right field
+	 */
 	@Override
 	public void handleValue(int datasetId, DataType type, double value) {
-		pDataset pdataset = datasets.get(datasetId);
+		pDataset dataset = this.datasets.get(datasetId);
 
-		if (pdataset == null) {
-			throw new IllegalArgumentException("Dataset with id " + datasetId + " not initialized.");
+		if (dataset==null) {
+			throw new IllegalArgumentException("There's no such ID: "+datasetId);
 		}
 
-		pDataset.pRecord newrecord = null;
-		// If there are records
-		if (pdataset.getRecordsCount()>0) {
-			// Update value
-			for (pDataset.pRecord.Builder rb : pdataset.toBuilder().getRecordsBuilderList()) {
-				if (rb.getDataTypeValue() == type.ordinal()) {
-					rb.addValues(value);
-
-					newrecord = rb.build();
-
-					break;
-				}
+		for (pDataset.pRecord.Builder rb : dataset.toBuilder().getRecordsBuilderList()) {
+			if (rb.getDataTypeValue() == type.ordinal()) {
+				this.datasets.put(datasetId,
+						dataset.toBuilder()
+								.setRecords(type.ordinal(), rb.addValues(value))
+								.build());
+				return;
 			}
 		}
 
-		// If no records found, or records are empty, create new one
-        if (newrecord == null) {
-			newrecord = pDataset.pRecord.newBuilder()
-					.addValues(value)
-					.build();
-		}
-
-		// Update the dataset
-		pDataset newdataset = pdataset.toBuilder()
-				.setRecords(type.ordinal(), newrecord)
-				.build();
-
-		// Add the new dataset to the list
-		this.datasets.put(datasetId, newdataset);
+		System.out.println("This line shouldn't be printed");
 	}
+
+
+
+
 
 	@Override
 	public void getResults(ResultConsumer consumer) throws IOException {
 		// Write datasets to os
-		for (pDataset ds : datasets.values()) {
-			os.write(ds.getSerializedSize()); // For C-based frameworks
-			ds.writeTo(os);
-			os.flush();
+			for (pDataset ds : datasets.values()) {
+				System.out.println("Sending dataset: " + ds);
+				//os.write(ds.getSerializedSize()); // For C-based frameworks
+				ds.writeTo(os);
+				os.flush();
 		}
 
 		// Receive results on is and store in array
@@ -101,6 +105,5 @@ public class ProtoDataHandler implements DataHandler {
 
 		for (pResult res : results)
 			System.out.println(res.toString());
-
 	}
 }

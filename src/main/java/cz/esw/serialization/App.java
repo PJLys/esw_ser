@@ -4,6 +4,7 @@ import cz.esw.serialization.handler.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Random;
 
 /**
@@ -25,9 +26,13 @@ public class App {
 
 	public void run(String host, int port, ProtocolType protocol, int numberOfTransmissions) throws IOException {
 		for (int i = 0; i < numberOfTransmissions; i++) {
+			System.out.println(i+1);
 			try (Socket socket = new Socket(host, port)) {
 				DataHandler dataHandler = getDataHandler(socket, protocol);
 				producer.generateDataAndCheckResults(dataHandler);
+			} catch (SocketException e) {
+				System.out.println("Server failed to parse incoming message," +
+						"shutting down communication...");
 			}
 		}
 	}
