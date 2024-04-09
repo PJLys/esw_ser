@@ -58,6 +58,7 @@ void processAvro(tcp::iostream& stream){
 
 void processProtobuf(tcp::iostream& stream)
 {
+    cout << "Processing protobuf!" << endl;
     esw::pDataset incoming_message;
     esw::pResult outgoing_message;   
 
@@ -66,6 +67,8 @@ void processProtobuf(tcp::iostream& stream)
     {
         throw std::logic_error("Failed to parse incoming message");
     }
+
+    cout << "Message read from stream" << endl;
 
     if(!incoming_message.IsInitialized())
     {
