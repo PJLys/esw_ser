@@ -90,11 +90,10 @@ public class ProtoDataHandler implements DataHandler {
 	public void getResults(ResultConsumer consumer) throws IOException {
 		// Write datasets to os
 		for (pDataset ds : datasets.values()) {
-			ds.writeTo(os);
+			ds.writeDelimitedTo(os);
 			os.flush();
 			//System.out.println(ds);
 		}
-		os.write('\n');
 		System.out.println("Sent data");
 
 		// Receive results on is and store in array

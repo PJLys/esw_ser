@@ -63,7 +63,7 @@ void processProtobuf(tcp::iostream& stream)
     esw::pResult outgoing_message;   
 
     /* Read the message from the stream */
-    if (!incoming_message.ParseFromIstream(&stream))
+    if (!incoming_message.ParseDelimitedFrom(&stream))
     {
         throw std::logic_error("Failed to parse incoming message");
     }
