@@ -88,11 +88,11 @@ public class ProtoDataHandler implements DataHandler {
 	@Override
 	public void getResults(ResultConsumer consumer) throws IOException {
 		// Write datasets to os
-			for (pDataset ds : datasets.values()) {
-				System.out.println("Sending dataset: " + ds);
-				//os.write(ds.getSerializedSize()); // For C-based frameworks
-				ds.writeTo(os);
-				os.flush();
+		for (pDataset ds : datasets.values()) {
+			os.write(ds.getSerializedSize()); // For C-based frameworks
+			ds.writeTo(os);
+			os.flush();
+			System.out.println(ds);
 		}
 
 		// Receive results on is and store in array
