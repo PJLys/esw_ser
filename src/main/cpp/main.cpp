@@ -58,11 +58,33 @@ void processAvro(tcp::iostream& stream){
 
 void processProtobuf(tcp::iostream& stream)
 {
+    cout<<"Processing protobuf message"<<endl;
+    uint32_t size = 0;
+    if(!stream.read(reinterpret_cast<char*>(&size), sizeof(size)))
+    {
+        if(stream.eof())
+        {
+            cout<<"End of stream reached"<<endl;
+        }
+        else
+        {
+            cout<<"Failed to read the size of the message"<<endl;
+        }
+    }
+
+
+    cout<<"Size of the message: "<<(int)size<<endl;
+    std::string message(size, '\0');
+    if(!stream.read(&message[0], size))
+    {
+        cout<<"Failed to read the message"<<endl;
+    }
+
     esw::pDataset incoming_message;
     esw::pResult outgoing_message;   
 
     /* Read the message from the stream */
-    if (!incoming_message.ParseFromIstream(&stream))
+    if (!incoming_message.ParseFromString(message))
     {
         throw std::logic_error("Failed to parse incoming message");
     }
@@ -115,7 +137,7 @@ void processProtobuf(tcp::iostream& stream)
     std::cout << "\nOutgoing message: " << std::endl;
     std::cout << outgoing_message.DebugString() << std::endl;
 
-    stream.clear();
+    stream.clear(); //Reset the state of the stream
 
     //Serialize the output message
     if (!outgoing_message.SerializeToOstream(&stream))
