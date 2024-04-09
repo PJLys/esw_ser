@@ -59,7 +59,7 @@ void processAvro(tcp::iostream& stream){
 void processProtobuf(tcp::iostream& stream)
 {
     esw::pDataset incoming_message;
-    esw::pResult outgoing_message;
+    esw::pResult outgoing_message;   
 
     /* Read the message from the stream */
     if (!incoming_message.ParseFromIstream(&stream))
@@ -71,10 +71,6 @@ void processProtobuf(tcp::iostream& stream)
     {
         throw std::logic_error("Incoming message is not initialized");
     }
-    else
-    {        
-        std::cout << incoming_message.DebugString() << std::endl;
-    }
 
     const esw::pMeasurementInfo& info = incoming_message.info();
     std::cout << "Measurement info: " << std::endl;
@@ -82,12 +78,18 @@ void processProtobuf(tcp::iostream& stream)
     std::cout << "\tTimestamp: " << info.timestamp() << std::endl;
     std::cout << "\tName: " << info.measurer_name() << std::endl;
 
+    auto* outInfo = outgoing_message.mutable_info();
+    outInfo->set_id(info.id());
+    outInfo->set_timestamp(info.timestamp());
+    outInfo->set_measurer_name(info.measurer_name());
+
+    //Process the incoming message
     for(int i = 0; i < incoming_message.records_size(); i++)
-    {
+    {        
         const esw::pDataset::pRecord& record = incoming_message.records(i);
         
         //Print the records to the console for debugging
-        std::cout << "Record: " << std::endl;
+        std::cout << "\nRecord " <<i << ": " << std::endl;
         std::cout << "\tData: " << record.data_type() << std::endl;
         std::cout << "\tValue: ";
         for (int j = 0; j < record.values_size(); j++)
@@ -103,12 +105,17 @@ void processProtobuf(tcp::iostream& stream)
             sum += record.values(j);
         }
         double avg = sum / record.values_size();
+        std:: cout << "\tAverage: " << avg << std::endl;
 
-        //Create a new record with the average
-        esw::pResult::pAverage* average = outgoing_message.add_averages();
-        average->set_data_type(record.data_type());
-        average->set_value(avg);
+        auto* outAverage = outgoing_message.add_averages();
+        outAverage->set_data_type(record.data_type());
+        outAverage->set_value(avg);        
     }
+    
+    std::cout << "\nOutgoing message: " << std::endl;
+    std::cout << outgoing_message.DebugString() << std::endl;
+
+    stream.clear();
 
     //Serialize the output message
     if (!outgoing_message.SerializeToOstream(&stream))
