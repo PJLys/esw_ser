@@ -58,7 +58,6 @@ void processAvro(tcp::iostream& stream){
 
 void processProtobuf(tcp::iostream& stream)
 {
-<<<<<<< HEAD
     cout<<"Processing protobuf message"<<endl;
     uint32_t size = 0;
     if(!stream.read(reinterpret_cast<char*>(&size), sizeof(size)))
@@ -81,23 +80,14 @@ void processProtobuf(tcp::iostream& stream)
         cout<<"Failed to read the message"<<endl;
     }
 
-=======
-    cout << "Processing protobuf!" << endl;
->>>>>>> 507c4da8d1214483701ea39ea860416b729b610c
     esw::pDataset incoming_message;
     esw::pResult outgoing_message;   
 
     /* Read the message from the stream */
-<<<<<<< HEAD
     if (!incoming_message.ParseFromString(message))
-=======
-    if (!incoming_message.ParseDelimitedFrom(&stream))
->>>>>>> 507c4da8d1214483701ea39ea860416b729b610c
     {
         throw std::logic_error("Failed to parse incoming message");
     }
-
-    cout << "Message read from stream" << endl;
 
     if(!incoming_message.IsInitialized())
     {
@@ -182,7 +172,7 @@ int main(int argc, char *argv[]) {
             tcp::iostream stream;
             boost::system::error_code ec;
             acceptor.accept(*stream.rdbuf(), ec);
-            cout << "Accepted connection with client" << endl;
+
             if(protocol == "JSON"){
                 processJSON(stream);
             }else if(protocol == "AVRO"){
