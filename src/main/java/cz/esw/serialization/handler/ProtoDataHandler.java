@@ -4,6 +4,7 @@ import cz.esw.serialization.ResultConsumer;
 import cz.esw.serialization.json.DataType;
 
 import java.io.*;
+import java.net.SocketException;
 import java.rmi.UnexpectedException;
 import java.util.*;
 
@@ -89,20 +90,25 @@ public class ProtoDataHandler implements DataHandler {
 	public void getResults(ResultConsumer consumer) throws IOException {
 		// Write datasets to os
 		for (pDataset ds : datasets.values()) {
-			//os.write(ds.getSerializedSize()); // For C-based frameworks
 			ds.writeTo(os);
 			os.flush();
-			System.out.println(ds);
+			//System.out.println(ds);
 		}
-		//os.write(0);
-		os.close();
+		os.write('\n');
+		System.out.println("Sent data");
 
 		// Receive results on is and store in array
 		List<pResult> results = new ArrayList<>();
 		while (true) {
-			pResult res = pResult.parseDelimitedFrom(is);
-			if (res== null) break;
-			results.add(res);
+			try {
+				pResult res = pResult.parseDelimitedFrom(is);
+				if (res== null) break;
+				System.out.println("Received " + res);
+				results.add(res);
+			}
+			catch (SocketException e) {
+				System.out.println(e);
+			}
 		}
 
 		for (pResult res : results)

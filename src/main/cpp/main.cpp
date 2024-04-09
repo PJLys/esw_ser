@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
             tcp::iostream stream;
             boost::system::error_code ec;
             acceptor.accept(*stream.rdbuf(), ec);
-
+            cout << "Accepted connection with client" << endl;
             if(protocol == "JSON"){
                 processJSON(stream);
             }else if(protocol == "AVRO"){

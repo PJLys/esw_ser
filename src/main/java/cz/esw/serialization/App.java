@@ -5,6 +5,7 @@ import cz.esw.serialization.handler.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -31,8 +32,7 @@ public class App {
 				DataHandler dataHandler = getDataHandler(socket, protocol);
 				producer.generateDataAndCheckResults(dataHandler);
 			} catch (SocketException e) {
-				System.out.println("Server failed to parse incoming message," +
-						"shutting down communication...");
+				System.out.println(e.getMessage() + Arrays.toString(e.getStackTrace()));
 			}
 		}
 	}
