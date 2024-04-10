@@ -59,96 +59,108 @@ void processAvro(tcp::iostream& stream){
     throw std::logic_error("TODO: Implement avro");
 }
 
-void processProtobuf(tcp::iostream& stream)
-{
+void processProtobuf(tcp::iostream& stream) {
     cout<<"Processing protobuf message"<<endl;
-    uint32_t size = 0;
-    if(!stream.read(reinterpret_cast<char*>(&size), sizeof(size)))
-    {
-        if(stream.eof())
-        {
-            cout<<"End of stream reached"<<endl;
-        }
-        else
-        {
-            cout<<"Failed to read the size of the message"<<endl;
-        }
-    }
-
-
-    cout<<"Size of the message: "<<(int)size<<endl;
-    std::string message(size, '\0');
-    if(!stream.read(&message[0], size))
-    {
-        cout<<"Failed to read the message"<<endl;
-    }
-
-    esw::pDataset incoming_message;
-    esw::pResult outgoing_message;   
-
-    /* Read the message from the stream */
-    if (!incoming_message.ParseFromString(message))
-    {
-        throw std::logic_error("Failed to parse incoming message");
-    }
-
-    if(!incoming_message.IsInitialized())
-    {
-        throw std::logic_error("Incoming message is not initialized");
-    }
-
-    const esw::pMeasurementInfo& info = incoming_message.info();
-    std::cout << "Measurement info: " << std::endl;
-    std::cout << "\tID: " << info.id() << std::endl;
-    std::cout << "\tTimestamp: " << info.timestamp() << std::endl;
-    std::cout << "\tName: " << info.measurer_name() << std::endl;
-
-    auto* outInfo = outgoing_message.mutable_info();
-    outInfo->set_id(info.id());
-    outInfo->set_timestamp(info.timestamp());
-    outInfo->set_measurer_name(info.measurer_name());
-
-    //Process the incoming message
-    for(int i = 0; i < incoming_message.records_size(); i++)
-    {        
-        const esw::pDataset::pRecord& record = incoming_message.records(i);
-        
-        //Print the records to the console for debugging
-        std::cout << "\nRecord " <<i << ": " << std::endl;
-        std::cout << "\tData: " << record.data_type() << std::endl;
-        std::cout << "\tValue: ";
-        for (int j = 0; j < record.values_size(); j++)
-        {
-            std::cout << record.values(j) << " ";
-        }
-        std::cout << std::endl;
-
-        //Calculate the average
-        double sum = 0;
-        for (int j = 0; j < record.values_size(); j++)
-        {
-            sum += record.values(j);
-        }
-        double avg = sum / record.values_size();
-        std:: cout << "\tAverage: " << avg << std::endl;
-
-        auto* outAverage = outgoing_message.add_averages();
-        outAverage->set_data_type(record.data_type());
-        outAverage->set_value(avg);        
-    }
+    while (1) {
+        uint32_t size = 0;
     
-    std::cout << "\nOutgoing message: " << std::endl;
-    std::cout << outgoing_message.DebugString() << std::endl;
+        if(!stream.read(reinterpret_cast<char*>(&size), sizeof(size)))
+        {
+            if(stream.eof())
+            {
+                cout<<"End of stream reached"<<endl;
+                break;
+            }
+            else
+            {
+                cout<<"Failed to read the size of the message"<<endl;
+                break;
+            }
+        }
 
-    stream.clear(); //Reset the state of the stream
+        size = ntohl(size);
+        cout<<"Size of the message: "<< size <<endl;
+        std::string message(size, '\0');
+        if(!stream.read(&message[0], size))
+        {
+            cout<<"Failed to read the message"<<endl;
+            break;
+        }
 
-    //Serialize the output message
-    if (!outgoing_message.SerializeToOstream(&stream))
-    {
-        throw std::logic_error("Failed to serialize outgoing message");
+        esw::pDataset incoming_message;
+        esw::pResult outgoing_message;   
+
+        /* Read the message from the stream */
+        if (!incoming_message.ParseFromString(message))
+        {
+            throw std::logic_error("Failed to parse incoming message");
+        }
+
+        if(!incoming_message.IsInitialized())
+        {
+            throw std::logic_error("Incoming message is not initialized");
+        }
+
+        const esw::pMeasurementInfo& info = incoming_message.info();
+        std::cout << "Measurement info: " << std::endl;
+        std::cout << "\tID: " << info.id() << std::endl;
+        std::cout << "\tTimestamp: " << info.timestamp() << std::endl;
+        std::cout << "\tName: " << info.measurer_name() << std::endl;
+
+        auto* outInfo = outgoing_message.mutable_info();
+        outInfo->set_id(info.id());
+        outInfo->set_timestamp(info.timestamp());
+        outInfo->set_measurer_name(info.measurer_name());
+
+        //Process the incoming message
+        for(int i = 0; i < incoming_message.records_size(); i++)
+        {        
+            const esw::pDataset::pRecord& record = incoming_message.records(i);
+            
+            //Print the records to the console for debugging
+            std::cout << "\nRecord " <<i << ": " << std::endl;
+            std::cout << "\tData: " << record.data_type() << std::endl;
+            std::cout << "\tValue: ";
+            for (int j = 0; j < record.values_size(); j++)
+            {
+                std::cout << record.values(j) << " ";
+            }
+            std::cout << std::endl;
+
+            //Calculate the average
+            double sum = 0;
+            for (int j = 0; j < record.values_size(); j++)
+            {
+                sum += record.values(j);
+            }
+            double avg = sum / record.values_size();
+            std:: cout << "\tAverage: " << avg << std::endl;
+
+            auto* outAverage = outgoing_message.add_averages();
+            outAverage->set_data_type(record.data_type());
+            outAverage->set_value(avg);        
+        }
+    
+        std::cout << "\nOutgoing message: " << std::endl;
+        std::cout << outgoing_message.DebugString() << std::endl;
+
+        stream.clear(); //Reset the state of the stream
+
+        uint32_t reply_size = htonl(outgoing_message.ByteSizeLong());
+
+        if (!stream.write(reinterpret_cast<const char*>(&reply_size), sizeof(reply_size))) {
+            cout << "Failed to write the size of the message" << endl;
+            break; // Exit the loop on error
+        }
+        
+        //Serialize the output message
+        if (!outgoing_message.SerializeToOstream(&stream))
+        {
+            throw std::logic_error("Failed to serialize outgoing message");
+        }
+
+        cout << "Message sent!" << endl;
     }
-
-    cout << "Message sent!" << endl;
 }
 
 int main(int argc, char *argv[]) {
