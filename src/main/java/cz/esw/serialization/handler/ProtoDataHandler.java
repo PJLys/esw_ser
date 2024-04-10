@@ -82,26 +82,74 @@ public class ProtoDataHandler implements DataHandler {
 		System.out.println("This line shouldn't be printed");
 	}
 
+	public void printSerializedDataSizes() throws IOException, ClassNotFoundException {
+		// Open the "output.txt" file for reading
+		FileInputStream fis = new FileInputStream("output.txt");
+		ObjectInputStream ois = new ObjectInputStream(fis);
 
+		try {
+			while (true) {
+				// Read the size of the serialized data from the file
+				byte[] sizeBytes = new byte[4];
+				ois.readFully(sizeBytes);
+				int size = byteArrayToInt(sizeBytes);
+				// Print the size
+				System.out.println("Size of serialized data: " + size);
 
+				// Read and discard the serialized data
+				byte[] data = new byte[size];
+				ois.readFully(data); // Read the serialized data and discard it
+			}
+		} catch (IOException e) {
+			// End of file reached
+			System.out.println("End of file reached");
+		} finally {
+			// Close the input stream
+			ois.close();
+		}
+	}
 
 
 	@Override
 	public void getResults(ResultConsumer consumer) throws IOException {
-		// Write datasets to os
-		for (pDataset ds : datasets.values()) {
-			ds.writeDelimitedTo(os);
-			os.flush();
-			//System.out.println(ds);
+		FileOutputStream fos = new FileOutputStream("output.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		try {
+			// Write datasets to os
+			for (pDataset ds : datasets.values()) {
+				int size = ds.getSerializedSize();
+				System.out.println("ds.getSerializedSize= " + size);
+				os.write(intToByteArray(size));
+				oos.write(intToByteArray(size));
+				os.flush();
+				oos.flush();
+				ds.writeTo(os);
+				ds.writeTo(oos);
+				os.flush();
+				oos.flush();
+				//System.out.println(ds);
+			}
+			System.out.println("Sent data");
+		} finally {
+			oos.close();
+			fos.close();
 		}
-		System.out.println("Sent data");
+
+		try {
+			printSerializedDataSizes();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}
 
 		// Receive results on is and store in array
 		List<pResult> results = new ArrayList<>();
+		System.out.println("Receiving results!");
 		while (true) {
 			try {
-				pResult res = pResult.parseDelimitedFrom(is);
-				if (res== null) break;
+				int size = extractSize(is);
+				byte[] rec = is.readNBytes(size);
+				pResult res = pResult.parseFrom(rec);
+				if (res.toString().isEmpty()) break;
 				System.out.println("Received " + res);
 				results.add(res);
 			}
@@ -110,7 +158,32 @@ public class ProtoDataHandler implements DataHandler {
 			}
 		}
 
+		System.out.println("Hi");
+
 		for (pResult res : results)
 			System.out.println(res.toString());
+	}
+
+	private int extractSize(InputStream is) throws IOException {
+		byte[] sizeBytes = new byte[4]; // Assuming the size is represented as a 4-byte integer
+		if (is.read(sizeBytes) != 4) {
+			throw new IOException("Failed to read size bytes");
+		}
+		return byteArrayToInt(sizeBytes);
+	}
+	private byte[] intToByteArray(int value) {
+		return new byte[] {
+				(byte)(value >> 24),
+				(byte)(value >> 16),
+				(byte)(value >> 8),
+				(byte)value
+		};
+	}
+
+	private int byteArrayToInt(byte[] bytes) {
+		return ((bytes[0] & 0xFF) << 24) |
+				((bytes[1] & 0xFF) << 16) |
+				((bytes[2] & 0xFF) << 8) |
+				(bytes[3] & 0xFF);
 	}
 }
