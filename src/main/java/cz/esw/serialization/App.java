@@ -27,7 +27,7 @@ public class App {
 
 	public void run(String host, int port, ProtocolType protocol, int numberOfTransmissions) throws IOException {
 		for (int i = 0; i < numberOfTransmissions; i++) {
-			System.out.println( (i+1) + "/" + numberOfTransmissions );
+			//System.out.println( (i+1) + "/" + numberOfTransmissions );
 			try (Socket socket = new Socket(host, port)) {
 				DataHandler dataHandler = getDataHandler(socket, protocol);
 				producer.generateDataAndCheckResults(dataHandler);

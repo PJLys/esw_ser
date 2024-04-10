@@ -1,6 +1,7 @@
 package cz.esw.serialization;
 
 import cz.esw.serialization.json.DataType;
+import cz.esw.serialization.proto.pResult;
 
 /**
  * Consumer of results calculated/obtained by a {@link cz.esw.serialization.handler.DataHandler}
@@ -12,4 +13,5 @@ public interface ResultConsumer {
 	void acceptMeasurementInfo(int resultId, long timestamp, String measurerName);
 
 	void acceptResult(DataType type, double result);
+
 }

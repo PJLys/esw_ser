@@ -82,95 +82,61 @@ public class ProtoDataHandler implements DataHandler {
 		System.out.println("This line shouldn't be printed");
 	}
 
-	public void printSerializedDataSizes() throws IOException, ClassNotFoundException {
-		// Open the "output.txt" file for reading
-		FileInputStream fis = new FileInputStream("output.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
-
-		try {
-			while (true) {
-				// Read the size of the serialized data from the file
-				byte[] sizeBytes = new byte[4];
-				ois.readFully(sizeBytes);
-				int size = byteArrayToInt(sizeBytes);
-				// Print the size
-				System.out.println("Size of serialized data: " + size);
-
-				// Read and discard the serialized data
-				byte[] data = new byte[size];
-				ois.readFully(data); // Read the serialized data and discard it
-			}
-		} catch (IOException e) {
-			// End of file reached
-			System.out.println("End of file reached");
-		} finally {
-			// Close the input stream
-			ois.close();
-		}
-	}
-
-
 	@Override
 	public void getResults(ResultConsumer consumer) throws IOException {
-		FileOutputStream fos = new FileOutputStream("output.txt");
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		try {
 			// Write datasets to os
 			for (pDataset ds : datasets.values()) {
 				int size = ds.getSerializedSize();
-				System.out.println("ds.getSerializedSize= " + size);
 				os.write(intToByteArray(size));
-				oos.write(intToByteArray(size));
 				os.flush();
-				oos.flush();
 				ds.writeTo(os);
-				ds.writeTo(oos);
 				os.flush();
-				oos.flush();
-				//System.out.println(ds);
 			}
-			System.out.println("Sent data");
-		} finally {
-			oos.close();
-			fos.close();
-		}
-
-		try {
-			printSerializedDataSizes();
-		} catch (ClassNotFoundException e) {
-			System.out.println(e);
+			System.out.println("Sent " + datasets.size() + " datasets!");
+		} catch (SocketException se){
+			System.out.println(se);
+			return;
 		}
 
 		// Receive results on is and store in array
-		List<pResult> results = new ArrayList<>();
-		System.out.println("Receiving results!");
-		while (true) {
+
+		for (int i = 0; i<datasets.size(); i++) {
 			try {
 				int size = extractSize(is);
 				byte[] rec = is.readNBytes(size);
-				pResult res = pResult.parseFrom(rec);
-				if (res.toString().isEmpty()) break;
-				System.out.println("Received " + res);
-				results.add(res);
-			}
-			catch (SocketException e) {
+				pResult result = pResult.parseFrom(rec);
+				pMeasurementInfo info = result.getInfo();
+				consumer.acceptMeasurementInfo(info.getId(), info.getTimestamp(), info.getMeasurerName());
+				List<pResult.Average> averageList = result.getAveragesList();
+				for (pResult.Average average : averageList) {
+					DataType t;
+					switch (average.getDataType()) {
+						case DOWNLOAD -> t = DataType.DOWNLOAD;
+						case UPLOAD -> t=DataType.UPLOAD;
+						case PING -> t=DataType.PING;
+						default -> throw new UnexpectedException("Detected other datatype then expected in reply!");
+					}
+					consumer.acceptResult(t, average.getValue());
+				}
+			} catch (SocketException e) {
 				System.out.println(e);
+			} catch (EOFException e) {
+				break;
 			}
 		}
-
-		System.out.println("Hi");
-
-		for (pResult res : results)
-			System.out.println(res.toString());
 	}
 
 	private int extractSize(InputStream is) throws IOException {
 		byte[] sizeBytes = new byte[4]; // Assuming the size is represented as a 4-byte integer
-		if (is.read(sizeBytes) != 4) {
-			throw new IOException("Failed to read size bytes");
-		}
-		return byteArrayToInt(sizeBytes);
+		int bytesRead = is.readNBytes(sizeBytes,0, sizeBytes.length);
+		return switch (bytesRead) {
+            case -1 -> throw new EOFException("End of the results!");
+            case 4 -> byteArrayToInt(sizeBytes);
+            default -> throw new IOException("Failed to read the size bytes");
+        };
 	}
+
 	private byte[] intToByteArray(int value) {
 		return new byte[] {
 				(byte)(value >> 24),
