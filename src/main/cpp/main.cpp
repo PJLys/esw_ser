@@ -146,6 +146,13 @@ void processProtobuf(tcp::iostream& stream) {
 
         stream.clear(); //Reset the state of the stream
 
+        uint32_t reply_size = htonl(outgoing_message.ByteSizeLong());
+
+        if (!stream.write(reinterpret_cast<const char*>(&reply_size), sizeof(reply_size))) {
+            cout << "Failed to write the size of the message" << endl;
+            break; // Exit the loop on error
+        }
+        
         //Serialize the output message
         if (!outgoing_message.SerializeToOstream(&stream))
         {
