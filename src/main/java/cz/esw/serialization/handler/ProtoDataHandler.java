@@ -108,8 +108,8 @@ public class ProtoDataHandler implements DataHandler {
 				pResult result = pResult.parseFrom(rec);
 				pMeasurementInfo info = result.getInfo();
 				consumer.acceptMeasurementInfo(info.getId(), info.getTimestamp(), info.getMeasurerName());
-				List<pResult.Average> averageList = result.getAveragesList();
-				for (pResult.Average average : averageList) {
+				List<pResult.pAverage> averageList = result.getAveragesList();
+				for (pResult.pAverage average : averageList) {
 					DataType t;
 					switch (average.getDataType()) {
 						case DOWNLOAD -> t = DataType.DOWNLOAD;
