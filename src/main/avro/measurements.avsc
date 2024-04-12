@@ -1,11 +1,61 @@
 [
-    {
-      "namespace": "cz.esw.serialization.avro",
-      "type": "record",
-      "name": "AMeasurementInfo",
-      "fields": [
-      ]
-    }
-  ]
+  {
+    "namespace": "cz.esw.serialization.avro",
+    "type": "record",
+    "name": "AMeasurementInfo",
+    "fields": [
+      {"name":  "id", "type": "int"},
+      {"name":  "timestamp", "type":  "long"},
+      {"name":  "measurer_name", "type":  "string"}
+    ]
+  },
+
+  {
+    "namespace": "cz.esw.serialization.avro",
+    "type": "enum",
+    "name": "ADataType",
+    "symbols": ["DOWNLOAD","UPLOAD","PING"]
+  },
+
+  {
+    "namespace": "cz.esw.serialization.avro",
+    "type": "record",
+    "name": "ARecord",
+    "fields": [
+      {"name": "data_type", "type": "ADataType"},
+      {"name": "values", "type": {"type": "array", "items": "double"}}
+    ]
+  },
+
+  {
+    "type": "record",
+    "name": "ADataset",
+    "namespace": "cz.esw.serialization.avro",
+    "fields": [
+      {"name": "info", "type": "AMeasurementInfo"},
+      {"name": "records", "type": {"type": "array", "items": "ARecord"}}
+    ]
+  },
+
+  {
+    "type": "record",
+    "name": "AAverage",
+    "namespace": "cz.esw.serialization.avro",
+    "fields": [
+      {"name": "data_type", "type": "ADataType"},
+      {"name": "value", "type": "double"}
+    ]
+  },
+
+  {
+    "type": "record",
+    "name": "AResult",
+    "namespace": "cz.esw.serialization.avro",
+    "fields": [
+      {"name": "info", "type": "AMeasurementInfo"},
+      {"name": "averages", "type": {"type": "array", "items": "AAverage"}}
+    ]
+  }
+]
 
 

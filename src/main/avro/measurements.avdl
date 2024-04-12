@@ -5,5 +5,37 @@
  * or you can use avro-tools to convert IDL to the schema (or IDEA Avro plugin supports the conversion).
  */
 @namespace("cz.esw.serialization.avro")
+
 protocol Protocol {
+	record AMeasurementInfo {
+		int id;
+		long timestamp;
+		string measurer_name;
+	}
+
+	enum ADataType {
+		DOWNLOAD,
+		UPLOAD,
+		PING
+	}
+
+	record ARecord {
+		ADataType data_type;
+		array<double> values;
+	}
+
+	record ADataset {
+		AMeasurementInfo info;
+		array<ARecord> records;
+	}
+
+	record AAverage {
+		ADataType data_type;
+		double value;
+	}
+
+	record AResult {
+		AMeasurementInfo info;
+		array<AAverage> averages;
+	}
 }
