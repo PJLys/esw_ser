@@ -40,9 +40,9 @@ public class ProtoDataHandler implements DataHandler {
 
 		List<pDataset.pRecord> recordList = new ArrayList<>();
 
-		for (int i=0; i<3; i++){
+		for (pDataType type : pDataType.values()){
 			recordList.add(pDataset.pRecord.newBuilder()
-					.setDataTypeValue(i)
+					.setDataType(type)
 					.build()
 			);
 		}
