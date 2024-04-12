@@ -125,6 +125,7 @@ public class ProtoDataHandler implements DataHandler {
 				break;
 			}
 		}
+		os.close();
 	}
 
 	private int extractSize(InputStream is) throws IOException {

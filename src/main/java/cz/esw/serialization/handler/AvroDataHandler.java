@@ -102,7 +102,6 @@ public class AvroDataHandler implements DataHandler {
 
 		if (datasets.replace(datasetId, newds)==null)
 			System.out.println("Something went seriously wrong updating the records");
-
 	}
 
 	@Override
