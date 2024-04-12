@@ -5,3 +5,4 @@ output.txt
 build/
 builddir/
 src/main/java/cz/esw/serialization/AppTest.java
+serialization.zip
