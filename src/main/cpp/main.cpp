@@ -10,6 +10,18 @@
 
 #include "measurements.pb.h"
 
+#include "avromeasurements.hh"
+#include <avro/Decoder.hh>
+#include <avro/Encoder.hh>
+#include <avro/ValidSchema.hh>
+#include <avro/Schema.hh>
+#include <avro/Compiler.hh>
+#include <avro/DataFile.hh>
+#include <avro/Stream.hh>
+#include <avro/Specific.hh>
+
+#define DEBUG 0
+
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -55,12 +67,99 @@ void processJSON(tcp::iostream& stream){
         cout << "Quiet operation enabled" << endl;
 }
 
-void processAvro(tcp::iostream& stream){
+void processAvro(tcp::iostream& stream)
+{
+    cout << "Processing avro message" << endl;    
+    
+    try {
+        // The decoder and the input stream
+        avro::DecoderPtr decoder = avro::binaryDecoder();
+        std::unique_ptr<avro::InputStream> avroStream = avro::istreamInputStream(stream.rdbuf());
+
+        // Create an instance of the generated class for the dataset
+        avromessage::AResult result;
+
+        // Initialize the decoder
+        decoder->init(*avroStream);
+
+        // Decode the data
+        avro::decode(*decoder, result);
+
+        // Output some information from the result to verify it's working
+        std::cout << "Received ID: " << result.info.id << std::endl;
+        std::cout << "Measurement Name: " << result.info.measurer_name << std::endl;
+        for (const auto& average : result.averages) {
+            std::cout << "Data Type: " << average.data_type << ", Value: " << average.value << std::endl;
+        }
+
+    } 
+    catch (const avro::Exception& e) {
+        std::cerr << "Failed to parse Avro message: " << e.what() << std::endl;
+    }
+
+
+
+    /*
+    //Deserialize the message
+    avro::memoryInputStream in(reinterpret_cast<const uint8_t*>(message.data()), message.size());
+    avro::DecoderPtr decoder = avro::jsonDecoder(avromeasurements::schema());
+    decoder->init(in);
+
+    avromeasurements::measurements incoming_message;
+    avro::decode(*decoder, incoming_message);
+
+    //Print the message to the console for debugging
+    std::cout << "Incoming message: " << std::endl;
+    std::cout << "ID: " << incoming_message.id() << std::endl;
+    std::cout << "Timestamp: " << incoming_message.timestamp() << std::endl;
+    std::cout << "Measurer name: " << incoming_message.measurer_name() << std::endl;
+
+    //Process the incoming message
+    avromeasurements::measurements outgoing_message;
+    outgoing_message.id = incoming_message.id();
+    outgoing_message.timestamp = incoming_message.timestamp();
+    outgoing_message.measurer_name = incoming_message.measurer_name();
+
+    for(int i = 0; i < incoming_message.records.size(); i++)
+    {
+        const avromeasurements::record& record = incoming_message.records[i];
+        
+        //Print the records to the console for debugging
+        std::cout << "\nRecord " <<i << ": " << std::endl;
+        std::cout << "\tData: " << record.data_type << std::endl;
+        std::cout << "\tValue: ";
+        for (int j = 0; j < record.values.size(); j++)
+        {
+            std::cout << record.values[j] << " ";
+        }
+        std::cout << std::endl;
+
+        //Calculate the average
+        double sum = 0;
+        for (int j = 0; j < record.values.size(); j++)
+        {
+            sum += record.values[j];
+        }
+        double avg = sum / record.values.size();
+        std:: cout << "\tAverage: " << avg << std::endl;
+
+        avromeasurements::average outAverage;
+        outAverage.data_type = record.data_type;
+        outAverage.value = avg;
+        outgoing_message.averages.push_back(outAverage);
+    }
+
+    std::cout << "\nOutgoing message: " << std::endl;
+    std::cout << "ID: " << outgoing_message.id << std::endl;
+    */
+
     throw std::logic_error("TODO: Implement avro");
 }
 
-void processProtobuf(tcp::iostream& stream) {
-    cout<<"Processing protobuf message"<<endl;
+void processProtobuf(tcp::iostream& stream) 
+{
+    cout << "Processing protobuf message" << endl;
+
     while (1) {
         uint32_t size = 0;
     
@@ -79,7 +178,9 @@ void processProtobuf(tcp::iostream& stream) {
         }
 
         size = ntohl(size);
-        cout<<"Size of the message: "<< size <<endl;
+        #if DEBUG
+            cout<<"Size of the message: "<< size <<endl;
+        #endif
         std::string message(size, '\0');
         if(!stream.read(&message[0], size))
         {
@@ -102,10 +203,12 @@ void processProtobuf(tcp::iostream& stream) {
         }
 
         const esw::pMeasurementInfo& info = incoming_message.info();
-        std::cout << "Measurement info: " << std::endl;
-        std::cout << "\tID: " << info.id() << std::endl;
-        std::cout << "\tTimestamp: " << info.timestamp() << std::endl;
-        std::cout << "\tName: " << info.measurer_name() << std::endl;
+        #if DEBUG
+            std::cout << "Measurement info: " << std::endl;
+            std::cout << "\tID: " << info.id() << std::endl;
+            std::cout << "\tTimestamp: " << info.timestamp() << std::endl;
+            std::cout << "\tName: " << info.measurer_name() << std::endl;
+        #endif
 
         auto* outInfo = outgoing_message.mutable_info();
         outInfo->set_id(info.id());
@@ -117,15 +220,17 @@ void processProtobuf(tcp::iostream& stream) {
         {        
             const esw::pDataset::pRecord& record = incoming_message.records(i);
             
-            //Print the records to the console for debugging
-            std::cout << "\nRecord " <<i << ": " << std::endl;
-            std::cout << "\tData: " << record.data_type() << std::endl;
-            std::cout << "\tValue: ";
-            for (int j = 0; j < record.values_size(); j++)
-            {
-                std::cout << record.values(j) << " ";
-            }
-            std::cout << std::endl;
+            #if DEBUG
+                //Print the records to the console for debugging
+                std::cout << "\nRecord " <<i << ": " << std::endl;
+                std::cout << "\tData: " << record.data_type() << std::endl;
+                std::cout << "\tValue: ";
+                for (int j = 0; j < record.values_size(); j++)
+                {
+                    std::cout << record.values(j) << " ";
+                }
+                std::cout << std::endl;
+            #endif
 
             //Calculate the average
             double sum = 0;
@@ -134,15 +239,20 @@ void processProtobuf(tcp::iostream& stream) {
                 sum += record.values(j);
             }
             double avg = sum / record.values_size();
-            std:: cout << "\tAverage: " << avg << std::endl;
+            #if DEBUG
+                std:: cout << "\tAverage: " << avg << std::endl;
+            #endif
 
             auto* outAverage = outgoing_message.add_averages();
             outAverage->set_data_type(record.data_type());
             outAverage->set_value(avg);        
         }
     
-        std::cout << "\nOutgoing message: " << std::endl;
-        std::cout << outgoing_message.DebugString() << std::endl;
+        #if DEBUG
+            //Print the outgoing message to the console for debugging
+            std::cout << "\nOutgoing message: " << std::endl;
+            std::cout << outgoing_message.DebugString() << std::endl;
+        #endif
 
         stream.clear(); //Reset the state of the stream
 
@@ -159,7 +269,7 @@ void processProtobuf(tcp::iostream& stream) {
             throw std::logic_error("Failed to serialize outgoing message");
         }
 
-        cout << "Message sent!" << endl;
+        cout << "Proto message sent!" << endl;
     }
 }
 
