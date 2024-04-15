@@ -18,8 +18,7 @@ import org.apache.commons.lang3.NotImplementedException;
 public class ProtoDataHandler implements DataHandler {
 	private final InputStream is;
 	private final OutputStream os;
-	protected Map<Integer, pDataset> datasets;
-
+	protected Map<Integer, pDataset.Builder> datasets;
 	public ProtoDataHandler(InputStream is, OutputStream os) {
 		this.is = is; this.os = os;
 	}
@@ -47,12 +46,11 @@ public class ProtoDataHandler implements DataHandler {
 			);
 		}
 
-		pDataset pdataset = pDataset.newBuilder()
+		pDataset.Builder dsbuilder = pDataset.newBuilder()
 				.setInfo(pinfo)
-				.addAllRecords(recordList)
-				.build();
+				.addAllRecords(recordList);
 
-		this.datasets.put(datasetId, pdataset);
+		this.datasets.put(datasetId, dsbuilder);
 	}
 
 	/**
@@ -63,18 +61,15 @@ public class ProtoDataHandler implements DataHandler {
 	 */
 	@Override
 	public void handleValue(int datasetId, DataType type, double value) {
-		pDataset dataset = this.datasets.get(datasetId);
+		pDataset.Builder dsbuilder = this.datasets.get(datasetId);
 
-		if (dataset==null) {
-			throw new IllegalArgumentException("There's no such ID: "+datasetId);
+		if (dsbuilder==null) {
+			throw new IllegalArgumentException("There's no such ID: "+ datasetId);
 		}
 
-		for (pDataset.pRecord.Builder rb : dataset.toBuilder().getRecordsBuilderList()) {
+		for (pDataset.pRecord.Builder rb : dsbuilder.getRecordsBuilderList()) {
 			if (rb.getDataTypeValue() == type.ordinal()) {
-				this.datasets.put(datasetId,
-						dataset.toBuilder()
-								.setRecords(type.ordinal(), rb.addValues(value))
-								.build());
+				rb.addValues(value);
 				return;
 			}
 		}
@@ -85,13 +80,13 @@ public class ProtoDataHandler implements DataHandler {
 	@Override
 	public void getResults(ResultConsumer consumer) throws IOException {
 		try {
+			System.out.println("Getting results");
 			// Write datasets to os
-			for (pDataset ds : datasets.values()) {
+			for (pDataset.Builder dsbuilder : datasets.values()) {
+				pDataset ds = dsbuilder.build();
 				int size = ds.getSerializedSize();
 				os.write(intToByteArray(size));
-				os.flush();
 				ds.writeTo(os);
-				os.flush();
 			}
 			System.out.println("Sent " + datasets.size() + " datasets!");
 		} catch (SocketException se){

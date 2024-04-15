@@ -8,6 +8,6 @@ import java.io.IOException;
 public class AppTest {
 
 	public static void main(String[] args) throws IOException {
-		new App(0, 100, 100).run("localhost", 12346, ProtocolType.PROTO, 10);
+		new App(0, 100, 10000).run("localhost", 12345, ProtocolType.PROTO, 10);
 	}
 }

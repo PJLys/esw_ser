@@ -35,7 +35,6 @@ public class DataProducer {
 		watch.start();
 		handler.initialize();
 		checker.initialize();
-
 		generateData(handler, checker);
 
 		StopWatch resultWatch = new StopWatch();
