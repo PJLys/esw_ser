@@ -20,7 +20,7 @@
 #include <avro/Stream.hh>
 #include <avro/Specific.hh>
 
-#define DEBUG 0
+#define DEBUG 1
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -68,7 +68,7 @@ void processJSON(tcp::iostream& stream){
 }
 
 void processAvro(tcp::iostream& stream)
-{
+{/*
     cout << "Processing avro message" << endl;    
     
     try {
@@ -99,7 +99,7 @@ void processAvro(tcp::iostream& stream)
 
 
 
-    /*
+
     //Deserialize the message
     avro::memoryInputStream in(reinterpret_cast<const uint8_t*>(message.data()), message.size());
     avro::DecoderPtr decoder = avro::jsonDecoder(avromeasurements::schema());
@@ -151,8 +151,8 @@ void processAvro(tcp::iostream& stream)
 
     std::cout << "\nOutgoing message: " << std::endl;
     std::cout << "ID: " << outgoing_message.id << std::endl;
-    */
-
+    
+*/
     throw std::logic_error("TODO: Implement avro");
 }
 
@@ -240,7 +240,7 @@ void processProtobuf(tcp::iostream& stream)
             }
             double avg = sum / record.values_size();
             #if DEBUG
-                std:: cout << "\tAverage: " << avg << std::endl;
+                std::cout << "\tAverage: " << avg << std::endl;
             #endif
 
             auto* outAverage = outgoing_message.add_averages();
@@ -269,7 +269,7 @@ void processProtobuf(tcp::iostream& stream)
             throw std::logic_error("Failed to serialize outgoing message");
         }
 
-        cout << "Proto message sent!" << endl;
+        //cout << "Proto message sent!" << endl;
     }
 }
 
